@@ -1,4 +1,4 @@
-# zio-features
+# ZIO Features
 
 | CI | Release | Snapshot | Discord |
 | --- | --- | --- | --- |
@@ -6,40 +6,14 @@
 
 # Summary
 
-A starter seed for ZIO 2.0 web applications, together with workshop material for the course, _Building Web Applications with ZIO 2.0_.
+A highly-scalable application that lets you easily and quickly integrate feature flagging and A/B testing into your ZIO-based application.
 
-You can find the workshop in the `zio-features-workshop` directory, and the starter project in the `zio-features-core` directory.
+ - Both feature flagging & A/B testing in a uniform interface
+ - Run experiments that operate on different subsets of users
+ - Easily establish complex relationships between experiments
+ - Automatically collect actionable metrics that can be exported into any tool
 
-# Testing
-
-Start an `sbt` shell and switch to the `workshop` project using  
-```
-project workshop
-```
-Run all tests using
-```
-test
-```
-or all tests in a particular test spec using e.g.
-```
-testOnly webapp.workshop.SchemaSpec
-```
-or all test suites with a particular name using
-```
-testOnly webapp.workshop.SchemaSpec -- -t "record capabilities"
-```
-
-# Documentation
-
-[zio-features Microsite](https://zio.github.io/zio-features/)
-
-# Contributing
-
-[Documentation for contributors](https://zio.github.io/zio-features/docs/about/about_contributing)
-
-## Code of Conduct
-
-See the [Code of Conduct](https://zio.github.io/zio-features/docs/about/about_coc)
+Compared with building your own solution, _ZIO Features_ lets you launch both feature flagging and A/B testing in hours instead of weeks, with a highly-scalable architecture that can economically handle tens of thousands of concurrent users.
 
 ## Support
 
