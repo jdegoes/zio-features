@@ -9,7 +9,7 @@ package zio.features
 //    2.1 If NOT participating, do ZIO Features Web Server-level assignment
 //    2.2 Persist participation
 
-// {"username": "jdegoes", 
+// {"username": "jdegoes",
 //  "country": "USA", "platform": "mobile", "os": "ios", "os_version": 14.343
 //  "signup_date": "10/22/2020"}
 
@@ -19,8 +19,6 @@ package zio.features
 //   3.1 Special case of regex matching???
 // 4. Check for date/times within some window of the current date/time
 // 5. Extract out and compare parts of a date/time
-
-
 
 /*
 
@@ -40,16 +38,15 @@ FeatureB
 
 
 
-*/
+ */
 // web server: ok, the user is a member of these experiments
 
 // type InstantiatedFeature[A] = (Feature[A], ParameterValues[A])
 // Experiment : User => Set[InstantiatedFeature[_]]
 // Experiment1 + Experiment2 ???
-// 
+//
 
 object Example {
-  val loginButtonFeature = 
+  val loginButtonFeature =
     Feature("login-button-3989").param[Int]("color") ?? "A new login button"
 }
-
