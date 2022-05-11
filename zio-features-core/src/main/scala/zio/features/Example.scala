@@ -6,8 +6,6 @@ package zio.features
 // 1. What are the set of experiments we are _currently_ running
 //    for this environment? (CACHED - Persistent, Distributed Cache -- like Redis)
 // 2. For each experiment, which group is THIS user participating in?
-//    2.1 If NOT participating, do ZIO Features Web Server-level assignment
-//    2.2 Persist participation
 
 // {"username": "jdegoes",
 //  "country": "USA", "platform": "mobile", "os": "ios", "os_version": 14.343
