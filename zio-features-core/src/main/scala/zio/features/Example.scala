@@ -47,4 +47,23 @@ FeatureB
 object Example {
   val loginButtonFeature =
     Feature("login-button-3989").param[Int]("color") ?? "A new login button"
+
+  val age      = Parameter.int("age")
+  val name     = Parameter.string("name")
+  val email    = Parameter.string("email")
+  val platform = Parameter.string("platform")
+  val os       = Parameter.string("os")
+  val planType = Parameter.string("plan_type")
+
+  val androidUsers = TargetingRule.param(os, Predicate.equals("android"))
+  val over21       = TargetingRule.param(age, Predicate.greaterThan(21))
+  val proUsers     = TargetingRule.param(planType, Predicate.equals("pro"))
+
+  val targetingRule = androidUsers && over21 && !proUsers
+
+  val onlyHalf = TargetingRule.param(email, Predicate.random[String](Predicate.greaterThan(0.5)))
+
+  def example(ex: Experiment): Experiment =
+    ex.subset(targetingRule && onlyHalf)
+
 }
