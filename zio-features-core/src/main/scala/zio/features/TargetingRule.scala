@@ -1,27 +1,18 @@
 package zio.features
 
 // ParameterData => Boolean
-sealed trait TargetingRule { self =>
-  def &&(that: TargetingRule): TargetingRule = TargetingRule.Conjunction(self, that)
+final case class TargetingRule(predicate: TargetingExpr[Boolean]) { self =>
+  def &&(that: TargetingRule): TargetingRule = TargetingRule(self.predicate && that.predicate)
 
-  def ||(that: TargetingRule): TargetingRule = TargetingRule.Disjunction(self, that)
+  def ||(that: TargetingRule): TargetingRule = TargetingRule(self.predicate || that.predicate)
 
-  def unary_! : TargetingRule = TargetingRule.Negation(self)
+  def unary_! : TargetingRule = TargetingRule(!self.predicate)
 }
 object TargetingRule {
-  case object Everyone                                                                      extends TargetingRule
-  private[features] final case class Conjunction(left: TargetingRule, right: TargetingRule) extends TargetingRule
-  private[features] final case class Disjunction(left: TargetingRule, right: TargetingRule) extends TargetingRule
-  private[features] final case class Negation(rule: TargetingRule)                          extends TargetingRule
-  private[features] final case class ParameterData[Type](projection: Parameter[Type], predicate: Predicate[Type])
-      extends TargetingRule
-
-  val everyone: TargetingRule = Everyone
+  val everyone: TargetingRule = TargetingRule(true)
 
   val nobody: TargetingRule = !everyone
 
-  def param[Type](parameter: Parameter[Type], predicate: Predicate[Type]): TargetingRule =
-    ParameterData(parameter, predicate)
-
-  // TargetingRule.param(platform, TargetingRule.equals("foo"))
+  def param[Type](parameter: Parameter[Type])(f: TargetingExpr[Type] => TargetingExpr[Boolean]): TargetingRule =
+    TargetingRule(f(TargetingExpr.extract(parameter)))
 }

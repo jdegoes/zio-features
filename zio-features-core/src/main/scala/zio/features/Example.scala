@@ -55,13 +55,15 @@ object Example {
   val os       = Parameter.string("os")
   val planType = Parameter.string("plan_type")
 
-  val androidUsers = TargetingRule.param(os, Predicate.equals("android"))
-  val over21       = TargetingRule.param(age, Predicate.greaterThan(21))
-  val proUsers     = TargetingRule.param(planType, Predicate.equals("pro"))
+  import TargetingExpr._
+
+  val androidUsers = TargetingRule(equalTo(extract(os), "android"))
+  val over21       = TargetingRule(greaterThan(extract(age), 21))
+  val proUsers     = TargetingRule(equalTo(extract(planType), "pro"))
 
   val targetingRule = androidUsers && over21 && !proUsers
 
-  val onlyHalf = TargetingRule.param(email, Predicate.random[String](Predicate.greaterThan(0.5)))
+  val onlyHalf = TargetingRule(greaterThan(random, literal(0.5)) && equalTo(0.5, 0.5))
 
   def example(ex: Experiment): Experiment =
     ex.subset(targetingRule && onlyHalf)
