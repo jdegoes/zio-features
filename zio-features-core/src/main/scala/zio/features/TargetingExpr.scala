@@ -12,6 +12,21 @@ sealed trait TargetingExpr[+Out] { self =>
   final def ||(that: TargetingExpr[Boolean])(implicit ev: Out <:< Boolean): TargetingExpr[Boolean] =
     TargetingExpr.Disjunction(self.widen[Boolean], that)
 
+  def >[Out1 >: Out](that: TargetingExpr[Out1]): TargetingExpr[Boolean] =
+    TargetingExpr.GreaterThan(self.widen[Out1], that)
+
+  def >=[Out1 >: Out](that: TargetingExpr[Out1]): TargetingExpr[Boolean] =
+    (self > that) || (self == that)
+
+  def <[Out1 >: Out](that: TargetingExpr[Out1]): TargetingExpr[Boolean] =
+    TargetingExpr.LessThan(self.widen[Out1], that)
+
+  def <=[Out1 >: Out](that: TargetingExpr[Out1]): TargetingExpr[Boolean] =
+    (self < that) || (self == that)
+
+  def ===[Out1 >: Out](that: TargetingExpr[Out1]): TargetingExpr[Boolean] =
+    TargetingExpr.Equals(self.widen[Out1], that)
+
   final def widen[Out2](implicit ev: Out <:< Out2): TargetingExpr[Out2] =
     self.asInstanceOf[TargetingExpr[Out2]]
 
@@ -34,18 +49,6 @@ object TargetingExpr {
       extends TargetingExpr[Boolean]
   private[features] final case class Negation(rule: TargetingExpr[Boolean])       extends TargetingExpr[Boolean]
   private[features] final case class Extraction[Type](parameter: Parameter[Type]) extends TargetingExpr[Type]
-
-  def equalTo[Type](left: TargetingExpr[Type], right: TargetingExpr[Type]): TargetingExpr[Boolean] =
-    Equals(left, right)
-
-  def extract[Type](parameter: Parameter[Type]): TargetingExpr[Type] =
-    Extraction(parameter)
-
-  def greaterThan[Type](left: TargetingExpr[Type], right: TargetingExpr[Type]): TargetingExpr[Boolean] =
-    GreaterThan(left, right)
-
-  def lessThan[Type](left: TargetingExpr[Type], right: TargetingExpr[Type]): TargetingExpr[Boolean] =
-    LessThan(left, right)
 
   implicit def literal[Type](value: Type)(implicit paramType: ParamType[Type]): TargetingExpr[Type] =
     Literal(value, paramType)
