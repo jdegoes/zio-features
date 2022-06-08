@@ -1,7 +1,7 @@
 package zio.features
 
-// UserData        => Map[ExperimentId, ExperimentGroup]
-// ExperimentGroup => Set[InstantiatedFeature[_]]
+// UserData        => Map[ExperimentId, FeatureSet]
+// FeatureSet => Set[InstantiatedFeature[_]]
 
 // 1. What are the set of experiments we are _currently_ running
 //    for this environment? (CACHED - Persistent, Distributed Cache -- like Redis)
@@ -20,7 +20,7 @@ package zio.features
 
 /*
 
-type SelectionCriteria = (PseudoRandomSeed, UserData) => ExperimentGroup
+type SelectionCriteria = (PseudoRandomSeed, UserData) => FeatureSet
 
 final case class Experiment(selectionCriteria: SelectionCriteria)
 

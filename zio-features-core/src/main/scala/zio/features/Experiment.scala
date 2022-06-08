@@ -5,19 +5,19 @@ final case class Experiment[-Input](
   startTime: java.time.Instant,
   duration: java.time.Duration,
   subset: TargetingRule[Input],
-  groups: List[(TargetingRule[Input], ExperimentGroup)],
-  defaultGroup: ExperimentGroup
+  groups: List[(TargetingRule[Input], FeatureSet)],
+  defaultGroup: FeatureSet
 ) {
-  def defaultGroup(g: ExperimentGroup): Experiment[Input] = copy(defaultGroup = g)
+  def defaultGroup(g: FeatureSet): Experiment[Input] = copy(defaultGroup = g)
 
   def duration(d: java.time.Duration): Experiment[Input] =
     copy(duration = d)
 
-  def group[Input1 <: Input](rule: TargetingRule[Input1], g: ExperimentGroup): Experiment[Input1] = groups((rule, g))
+  def group[Input1 <: Input](rule: TargetingRule[Input1], g: FeatureSet): Experiment[Input1] = groups((rule, g))
 
   def groups[Input1 <: Input](
-    g: (TargetingRule[Input1], ExperimentGroup),
-    gs: (TargetingRule[Input1], ExperimentGroup)*
+    g: (TargetingRule[Input1], FeatureSet),
+    gs: (TargetingRule[Input1], FeatureSet)*
   ): Experiment[Input1] =
     copy(groups = g :: gs.toList ::: groups)
 
@@ -28,7 +28,7 @@ final case class Experiment[-Input](
     copy(subset = subset && subset2)
 }
 object Experiment {
-  def apply(id: ExperimentId, defaultGroup: ExperimentGroup): Experiment[Any] =
+  def apply(id: ExperimentId, defaultGroup: FeatureSet): Experiment[Any] =
     Experiment(
       id,
       java.time.Instant.MIN,
