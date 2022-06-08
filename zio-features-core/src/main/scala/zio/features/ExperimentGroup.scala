@@ -1,3 +1,6 @@
 package zio.features
 
-trait ExperimentGroup
+sealed abstract case class ExperimentGroup private (features: Set[Feature[_]])
+object ExperimentGroup {
+  val empty: ExperimentGroup = new ExperimentGroup(Set.empty) {}
+}

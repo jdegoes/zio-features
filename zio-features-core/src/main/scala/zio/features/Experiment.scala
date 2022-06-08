@@ -1,31 +1,34 @@
 package zio.features
 
-final case class Experiment(
+final case class Experiment[-Input](
   id: ExperimentId,
   startTime: java.time.Instant,
   duration: java.time.Duration,
-  subset: TargetingRule,
-  groups: List[(TargetingRule, ExperimentGroup)],
+  subset: TargetingRule[Input],
+  groups: List[(TargetingRule[Input], ExperimentGroup)],
   defaultGroup: ExperimentGroup
 ) {
-  def defaultGroup(g: ExperimentGroup): Experiment = copy(defaultGroup = g)
+  def defaultGroup(g: ExperimentGroup): Experiment[Input] = copy(defaultGroup = g)
 
-  def duration(d: java.time.Duration): Experiment =
+  def duration(d: java.time.Duration): Experiment[Input] =
     copy(duration = d)
 
-  def group(rule: TargetingRule, g: ExperimentGroup): Experiment = groups((rule, g))
+  def group[Input1 <: Input](rule: TargetingRule[Input1], g: ExperimentGroup): Experiment[Input1] = groups((rule, g))
 
-  def groups(g: (TargetingRule, ExperimentGroup), gs: (TargetingRule, ExperimentGroup)*): Experiment =
+  def groups[Input1 <: Input](
+    g: (TargetingRule[Input1], ExperimentGroup),
+    gs: (TargetingRule[Input1], ExperimentGroup)*
+  ): Experiment[Input1] =
     copy(groups = g :: gs.toList ::: groups)
 
-  def startTime(time: java.time.Instant): Experiment =
+  def startTime(time: java.time.Instant): Experiment[Input] =
     copy(startTime = time)
 
-  def subset(subset2: TargetingRule): Experiment =
+  def subset[Input1 <: Input](subset2: TargetingRule[Input1]): Experiment[Input1] =
     copy(subset = subset && subset2)
 }
 object Experiment {
-  def apply(id: ExperimentId, defaultGroup: ExperimentGroup): Experiment =
+  def apply(id: ExperimentId, defaultGroup: ExperimentGroup): Experiment[Any] =
     Experiment(
       id,
       java.time.Instant.MIN,

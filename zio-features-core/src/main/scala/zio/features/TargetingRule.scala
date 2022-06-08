@@ -1,15 +1,19 @@
 package zio.features
 
 // () => Boolean
-final case class TargetingRule(predicate: TargetingExpr[Boolean]) { self =>
-  def &&(that: TargetingRule): TargetingRule = TargetingRule(self.predicate && that.predicate)
+final case class TargetingRule[-Input](predicate: TargetingExpr[Input, Boolean]) { self =>
+  def &&[Input1 <: Input](that: TargetingRule[Input1]): TargetingRule[Input1] = TargetingRule(
+    self.predicate && that.predicate
+  )
 
-  def ||(that: TargetingRule): TargetingRule = TargetingRule(self.predicate || that.predicate)
+  def ||[Input1 <: Input](that: TargetingRule[Input1]): TargetingRule[Input1] = TargetingRule(
+    self.predicate || that.predicate
+  )
 
-  def unary_! : TargetingRule = TargetingRule(!self.predicate)
+  def unary_! : TargetingRule[Input] = TargetingRule(!self.predicate)
 }
 object TargetingRule {
-  val everyone: TargetingRule = TargetingRule(true)
+  val everyone: TargetingRule[Any] = TargetingRule(true)
 
-  val nobody: TargetingRule = !everyone
+  val nobody: TargetingRule[Any] = !everyone
 }

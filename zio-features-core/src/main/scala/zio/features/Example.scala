@@ -39,21 +39,23 @@ FeatureB
  */
 // web server: ok, the user is a member of these experiments
 
-// type InstantiatedFeature[A] = (Feature[A], ParameterValues[A])
+// type InstantiatedFeature[A] = (FeatureDescriptor[A], ParameterValues[A])
 // Experiment : User => Set[InstantiatedFeature[_]]
 // Experiment1 + Experiment2 ???
 //
 
 object Example {
-  val loginButtonFeature =
-    Feature("login-button-3989").param[Int]("color") ?? "A new login button"
+  val color = ParamDescriptor.int("color")
 
-  val age      = Parameter.int("age")
-  val name     = Parameter.string("name")
-  val email    = Parameter.string("email")
-  val platform = Parameter.string("platform")
-  val os       = Parameter.string("os")
-  val planType = Parameter.string("plan_type")
+  val loginButtonFeature =
+    FeatureDescriptor("login-button-3989").param(color) ?? "A new login button"
+
+  val age      = ParamDescriptor.int("age")
+  val name     = ParamDescriptor.string("name")
+  val email    = ParamDescriptor.string("email")
+  val platform = ParamDescriptor.string("platform")
+  val os       = ParamDescriptor.string("os")
+  val planType = ParamDescriptor.string("plan_type")
 
   import TargetingExpr._
 
@@ -65,7 +67,7 @@ object Example {
 
   val onlyHalf = TargetingRule(random > 0.5)
 
-  def example(ex: Experiment): Experiment =
+  def example(ex: Experiment[Any]): Experiment[Int with String] =
     ex.subset(targetingRule && onlyHalf)
 
 }
