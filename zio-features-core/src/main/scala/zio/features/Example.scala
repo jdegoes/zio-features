@@ -47,7 +47,7 @@ FeatureB
 object Example {
   val color = ParamDescriptor.int("color")
 
-  val loginButtonFeature =
+  val loginButtonFeature: FeatureDescriptor[Int] =
     FeatureDescriptor("login-button-3989").param(color) ?? "A new login button"
 
   val age      = ParamDescriptor.int("age")
