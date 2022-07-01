@@ -1,20 +1,25 @@
 package zio.features
 
 // FeatureTemplate, FeatureDescriptor
-final case class FeatureDescriptor[Types](
+final case class FeatureDescriptor[Input, Output](
   id: FeatureId,
   description: Vector[String],
-  dataDescriptor: DataDescriptor[Types]
+  inputDescriptor: DataDescriptor[Input],
+  outputDescriptor: DataDescriptor[Output]
 ) {
   self =>
-  def ??(description2: String): FeatureDescriptor[Types] = copy(description = self.description ++ Vector(description2))
+  def ??(description2: String): FeatureDescriptor[Input, Output] =
+    copy(description = self.description ++ Vector(description2))
 
-  def param[Type](paramDescriptor: ParamDescriptor[Type]): FeatureDescriptor[Types with Type] =
-    copy(dataDescriptor = self.dataDescriptor.add(paramDescriptor))
+  def input[Type](paramDescriptor: ParamDescriptor[Type]): FeatureDescriptor[Input with Type, Output] =
+    copy(inputDescriptor = self.inputDescriptor.add(paramDescriptor))
+
+  def output[Type](paramDescriptor: ParamDescriptor[Type]): FeatureDescriptor[Input, Output with Type] =
+    copy(outputDescriptor = self.outputDescriptor.add(paramDescriptor))
 }
 
 object FeatureDescriptor {
-  def apply(name: String): FeatureDescriptor[Any] =
-    FeatureDescriptor(FeatureId(name), Vector.empty, DataDescriptor.empty)
+  def apply(name: String): FeatureDescriptor[Any, Any] =
+    FeatureDescriptor(FeatureId(name), Vector.empty, DataDescriptor.empty, DataDescriptor.empty)
 
 }

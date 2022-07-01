@@ -1,28 +1,12 @@
 package zio.features
 
-import zio._ 
+import zio._
 
 trait Features {
-  def isEnabled(fd: FeatureDescriptor[_]): Boolean
-
-  final def isDisabled(fd: FeatureDescriptor[_]): Boolean = 
-    !isEnabled(fd)
-
-  def ifEnabled[R, E, A, B](fd: FeatureDescriptor[A])(
-    body: A => ZIO[R, E, B]): ZIO[R, E, Option[B]]
-
-  final def ifDisabled[R, E, A](fd: FeatureDescriptor[_])(
-    body: => ZIO[R, E, A]): ZIO[R, E, Option[A]] = 
-      if (isDisabled(fd)) body.map(Some(_)) else ZIO.none
+  def catalog[Input](input: Input): FeatureCatalog[Input]
 }
 object Features {
   lazy val live: ZLayer[Any, Nothing, Features] = ???
-}
-final case class FeaturesLive() extends Features {
-  def isEnabled(fd: FeatureDescriptor[_]): Boolean = ???
-
-  def ifEnabled[R, E, A, B](fd: FeatureDescriptor[A])(
-    body: A => ZIO[R, E, B]): ZIO[R, E, Option[B]] = ???
 }
 
 /*
@@ -35,15 +19,16 @@ featureService.features {
 buttonColor <- feature.getValue("buttonColor")
 
 class ProfileEnrichmentService(features: Features, userRepo: UserRepo) {
-  def enrich: ZIO[Any, Throwable, Unit] = 
+  def enrich: ZIO[Any, Throwable, Unit] =
     for {
       user <- userRepo.getUserById("foo")
-      _    <- if (features.isEnabled(loginButtonFeature)) ... 
-              else ... 
-      _    <- features.ifEnabled(loginButtonFeature) { buttonColor =>
+      catalog = features.catalog(Data("name" -> user.name, "age" -> user.age, "email" -> user.email))
+      _    <- if (catalog.isEnabled(loginButtonFeature)) ...
+              else ...
+      _    <- catalog.ifEnabled(loginButtonFeature) { buttonColor =>
                 ...
               }
     } yield ???
 }
 
-*/
+ */

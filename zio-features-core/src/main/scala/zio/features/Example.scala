@@ -47,8 +47,12 @@ FeatureB
 object Example {
   val color = ParamDescriptor.int("color")
 
-  val loginButtonFeature: FeatureDescriptor[Int] =
-    FeatureDescriptor("login-button-3989").param(color) ?? "A new login button"
+  lazy val loginButtonFeature: FeatureDescriptor[Int with String with String, Int] =
+    FeatureDescriptor("login-button-3989")
+      .input(age)
+      .input(name)
+      .input(email)
+      .output(color) ?? "A new login button"
 
   val age      = ParamDescriptor.int("age")
   val name     = ParamDescriptor.string("name")
@@ -67,7 +71,18 @@ object Example {
 
   val onlyHalf = TargetingRule(random > 0.5)
 
+  // Experiment[("age", Int) & ("name", String) & ("email", String)]
+  // Data("age" -> Int, "name" -> String, "email" -> String) :
+  //   Data[("age", Int) & ("name", String) & ("email", String)]
   def example(ex: Experiment[Any]): Experiment[Int with String] =
     ex.subset(targetingRule && onlyHalf)
+
+  def example2(features: Features) = {
+    val catalog = features.catalog[Int with String](???)
+
+    catalog.ifEnabled(loginButtonFeature) { output =>
+      ???
+    }
+  }
 
 }
