@@ -2,7 +2,7 @@ package zio.features
 
 import zio._
 
-trait Features {
+trait Features extends FeatureCatalog[Any] {
   def catalog[Input](input: Input): FeatureCatalog[Input]
 }
 object Features {
