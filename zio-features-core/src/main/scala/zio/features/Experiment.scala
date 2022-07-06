@@ -31,7 +31,7 @@ final case class Experiment[-Input](
     copy(subset = subset && subset2)
 }
 object Experiment {
-  def apply2[A](id: ExperimentId, defaultGroup: FeatureDescriptorSet[A]): Experiment[A] =
+  def apply[A](id: ExperimentId, defaultGroup: FeatureDescriptorSet[A]): Experiment[A] =
     Experiment(
       id,
       java.time.Instant.MIN,
