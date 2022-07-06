@@ -1,5 +1,7 @@
 package zio.features
 
+import zio._
+
 // UserData        => Map[ExperimentId, FeatureSet]
 // FeatureSet => Set[InstantiatedFeature[_]]
 
@@ -47,7 +49,7 @@ FeatureB
 object Example {
   val color = ParamDescriptor.int("color")
 
-  lazy val loginButtonFeature: FeatureDescriptor[Int with String with String, Int] =
+  lazy val loginButtonFeature: FeatureDescriptor[("age", Int) & ("name", String) & ("email", String), ("color", Int)] =
     FeatureDescriptor("login-button-3989")
       .input(age)
       .input(name)
@@ -71,14 +73,13 @@ object Example {
 
   val onlyHalf = TargetingRule(random > 0.5)
 
-  // Experiment[("age", Int) & ("name", String) & ("email", String)]
-  // Data("age" -> Int, "name" -> String, "email" -> String) :
-  //   Data[("age", Int) & ("name", String) & ("email", String)]
-  def example(ex: Experiment[Any]): Experiment[Int with String] =
+  def example(ex: Experiment[Any]): Experiment[("os", String) & ("age", Int) & ("plan_type", String)] =
     ex.subset(targetingRule && onlyHalf)
 
+  val data = Data(("age", 42), ("name", "John"), ("email", "john@doe.com"))
+
   def example2(features: Features) = {
-    val catalog = features.catalog[Int with String](???)
+    val catalog = features.catalog[("age", Int) & ("name", String) & ("email", String)](???)
 
     catalog.ifEnabled(loginButtonFeature) { output =>
       ???

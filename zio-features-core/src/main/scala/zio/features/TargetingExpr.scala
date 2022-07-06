@@ -64,8 +64,8 @@ object TargetingExpr {
   ) extends TargetingExpr[Input, Boolean]
   private[features] final case class Negation[Input](rule: TargetingExpr[Input, Boolean])
       extends TargetingExpr[Input, Boolean]
-  private[features] final case class Extraction[Type](paramDescriptor: ParamDescriptor[Type])
-      extends TargetingExpr[Type, Type]
+  private[features] final case class Extraction[KeyValue, Type](paramDescriptor: ParamDescriptor[KeyValue])
+      extends TargetingExpr[KeyValue, Type]
 
   implicit def literal[Type](value: Type)(implicit paramType: ParamType[Type]): TargetingExpr[Any, Type] =
     Literal(value, paramType)
