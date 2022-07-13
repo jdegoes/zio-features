@@ -3,7 +3,7 @@ package zio.features
 import zio._
 
 trait Features extends FeatureCatalog[Any] {
-  def catalog[Input](input: Input): FeatureCatalog[Input]
+  def catalog[Input](input: Data[Input]): FeatureCatalog[Input]
 }
 object Features {
   lazy val live: ZLayer[Any, Nothing, Features] = ???

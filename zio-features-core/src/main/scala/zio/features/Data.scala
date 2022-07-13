@@ -3,6 +3,18 @@ package zio.features
 import zio._
 
 sealed abstract case class Data[Types] private (private val data: Map[ParamDescriptor[_], Any]) {
+  def get[Key <: Singleton with String, Value: ParamType](pd: ParamDescriptor[(Key, Value)])(implicit
+    subset: (Key, Value) <:< Types
+  ): Value =
+    data(pd).asInstanceOf[Value]
+
+  def add[Key <: Singleton with String, Value: ParamType](
+    pd: ParamDescriptor[(Key, Value)],
+    value: Value
+  ): Data[Types & (Key, Value)] =
+    new Data[Types & (Key, Value)](data + (pd -> value)) {}
+
+  // TODO: Maybe delete this one
   def add[Key <: Singleton with String, Value: ParamType](name: Key, value: Value): Data[Types & (Key, Value)] =
     new Data[Types & (Key, Value)](data + (ParamDescriptor[Key, Value](name) -> value)) {}
 }

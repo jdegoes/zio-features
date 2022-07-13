@@ -19,6 +19,8 @@ object ParamDescriptor {
       def paramType: ParamType[T] = paramType0
     }
 
+  def double[N <: Singleton with String](name0: N): ParamDescriptor[(N, Double)] = ParamDescriptor[N, Double](name0)
+
   def int[N <: Singleton with String](name0: N): ParamDescriptor[(N, Int)] = ParamDescriptor[N, Int](name0)
 
   def string[N <: Singleton with String](name0: N): ParamDescriptor[(N, String)] = ParamDescriptor[N, String](name0)
