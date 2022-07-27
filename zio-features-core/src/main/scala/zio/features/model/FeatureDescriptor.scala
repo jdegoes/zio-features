@@ -1,11 +1,12 @@
-package zio.features
+package zio.features.model
 
 // FeatureTemplate, FeatureDescriptor
 final case class FeatureDescriptor[Input, Output](
   id: FeatureId,
   description: Vector[String],
   inputDescriptor: DataDescriptor[Input],
-  outputDescriptor: DataDescriptor[Output]
+  outputDescriptor: DataDescriptor[Output],
+  targetingRule: TargetingRule[Input] = TargetingRule.everyone
 ) {
   self =>
   def ??(description2: String): FeatureDescriptor[Input, Output] =

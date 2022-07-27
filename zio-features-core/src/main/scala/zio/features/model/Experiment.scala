@@ -1,4 +1,4 @@
-package zio.features
+package zio.features.model
 
 final case class Experiment[-Input](
   id: ExperimentId,

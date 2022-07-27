@@ -1,4 +1,4 @@
-package zio.features
+package zio.features.model
 
 trait FeatureDescriptorSet[-Input] {
   def featureDescriptors[Input1 <: Input]: Set[FeatureDescriptor[_ >: Input1, _]]

@@ -1,4 +1,4 @@
-package zio.features
+package zio.features.model
 
 import zio._
 

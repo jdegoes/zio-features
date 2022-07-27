@@ -1,4 +1,4 @@
-package zio.features
+package zio.features.model
 
 // () => Boolean
 final case class TargetingRule[-Input](predicate: TargetingExpr[Input, Boolean]) { self =>

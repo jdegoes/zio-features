@@ -1,6 +1,8 @@
-package zio.features
+package zio.features.examples
 
 import zio._
+import zio.features.model._
+import zio.features.client._
 
 object EcommerceExample {
   val lifetime_spend = ParamDescriptor.double("lifetime_spend")
