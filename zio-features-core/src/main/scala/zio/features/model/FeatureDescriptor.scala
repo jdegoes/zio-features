@@ -2,11 +2,10 @@ package zio.features.model
 
 // FeatureTemplate, FeatureDescriptor
 final case class FeatureDescriptor[Input, Output](
-  id: FeatureId,
+  id: FeatureDescriptorId,
   description: Vector[String],
   inputDescriptor: DataDescriptor[Input],
-  outputDescriptor: DataDescriptor[Output],
-  targetingRule: TargetingRule[Input] = TargetingRule.everyone
+  outputDescriptor: DataDescriptor[Output]
 ) {
   self =>
   def ??(description2: String): FeatureDescriptor[Input, Output] =
@@ -21,6 +20,6 @@ final case class FeatureDescriptor[Input, Output](
 
 object FeatureDescriptor {
   def apply(name: String): FeatureDescriptor[Any, Any] =
-    FeatureDescriptor(FeatureId(name), Vector.empty, DataDescriptor.empty, DataDescriptor.empty)
+    FeatureDescriptor(FeatureDescriptorId(name), Vector.empty, DataDescriptor.empty, DataDescriptor.empty)
 
 }

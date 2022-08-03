@@ -11,4 +11,5 @@ object ParamType {
   implicit case object String  extends ParamType[java.lang.String]
   implicit case object Double  extends ParamType[scala.Double]
   implicit case object Boolean extends ParamType[scala.Boolean]
+  implicit case object Instant extends ParamType[java.time.Instant]
 }

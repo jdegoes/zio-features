@@ -30,15 +30,15 @@ trait CommonApis {
   trait FeatureRepo {
     import FeatureRepo.Error._
 
-    def create[In, Out](fd: FeatureDescriptor[In, Out]): ZIO[Any, FeatureAlreadyExists, Unit]
+    def create[In](fd: Feature[In]): ZIO[Any, FeatureAlreadyExists, Unit]
 
     def delete(id: FeatureId): ZIO[Any, FeatureNotFound, Unit]
 
-    def get(id: FeatureId): ZIO[Any, Throwable, Option[FeatureDescriptor[_, _]]]
+    def get(id: FeatureId): ZIO[Any, Throwable, Option[Feature[_]]]
 
-    def list: ZStream[Any, Nothing, FeatureDescriptor[_, _]]
+    def list: ZStream[Any, Nothing, Feature[_]]
 
-    def update[In, Out](fd: FeatureDescriptor[In, Out]): ZIO[Any, FeatureNotFound, Unit]
+    def update[In, Out](fd: Feature[In]): ZIO[Any, FeatureNotFound, Unit]
   }
   object FeatureRepo {
     sealed trait Error
