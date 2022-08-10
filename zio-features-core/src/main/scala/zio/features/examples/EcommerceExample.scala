@@ -1,17 +1,22 @@
 package zio.features.examples
 
 import zio._
-import zio.features.model._
 import zio.features.client._
 
 object EcommerceExample {
   val lifetime_spend = ParamDescriptor.double("lifetime_spend")
   val phone_number   = ParamDescriptor.string("phone_number")
+  val email          = ParamDescriptor.string("email")
 
-  val conciergeFeature: FeatureDescriptor[("lifetime_spend", Double), ("phone_number", String)] =
+  val conciergePhoneFeature: FeatureDescriptor[("lifetime_spend", Double), ("phone_number", String)] =
     FeatureDescriptor("concierge-number-001")
       .input(lifetime_spend)
       .output(phone_number) ?? "A feature that provides a concierge phone number for high-value customers"
+
+  val conciergeEmailFeature: FeatureDescriptor[("lifetime_spend", Double), ("email", String)] =
+    FeatureDescriptor("concierge-number-002")
+      .input(lifetime_spend)
+      .output(email) ?? "A feature that provides a concierge email for high-value customers"
 
   val smsNotifyPurchase: FeatureDescriptor[Any, Any] =
     FeatureDescriptor("sms-notify-purchase-001") ?? "A feature that sends an SMS notification when a purchase is made"
@@ -19,7 +24,12 @@ object EcommerceExample {
   import TargetingExpr._
 
   // TODO: Create an API for CRUD'ing these rules + features:
-  val highValueCustomers = TargetingRule(lifetime_spend.get > 10000.0)
+  val highValueCustomers = lifetime_spend.get > 10000.0
+
+  val fiftyPercent = TargetingExpr.random < 0.5
+
+  (FeatureDecisionMatrix.enable(conciergePhoneFeature).when(fiftyPercent) ||
+    FeatureDecisionMatrix.enable(conciergeEmailFeature)).when(highValueCustomers)
 
   trait Database
 
@@ -29,9 +39,12 @@ object EcommerceExample {
     def contactDetails: Task[ContactDetails] =
       for {
         lifetime_spend <- lifetimeSpend
-        catalog         = features.catalog(Data("lifetime_spend", lifetime_spend))
+        catalog         = features.catalog(Params("lifetime_spend", lifetime_spend))
         base           <- baseContactDetails
-      } yield catalog.check(conciergeFeature).map(data => base.withPhoneNumber(data.get(phone_number))).getOrElse(base)
+      } yield catalog
+        .check(conciergePhoneFeature)
+        .map(data => base.withPhoneNumber(data.get(phone_number)))
+        .getOrElse(base)
 
     def baseContactDetails: Task[ContactDetails] = ZIO.succeed(ContactDetails("221 B Baker Street", None))
 

@@ -6,45 +6,45 @@ import zio.features.model._
 
 trait CommonApis {
 
-  trait ExperimentRepo {
-    import ExperimentRepo.Error._
+  trait FeatureDescriptorRepo {
+    import FeatureDescriptorRepo.Error._
 
-    def create(experiment: Experiment[_]): ZIO[Any, ExperimentAlreadyExists, Unit]
+    def create(fd: FeatureDescriptor[_, _]): ZIO[Any, AlreadyExists, Unit]
 
-    def delete(id: ExperimentId): ZIO[Any, ExperimentNotFound, Unit]
+    def delete(id: FeatureDescriptorId): ZIO[Any, NotFound, Unit]
 
-    def get(id: ExperimentId): ZIO[Any, Throwable, Option[Experiment[_]]]
+    def get(id: FeatureDescriptorId): ZIO[Any, Throwable, Option[FeatureDescriptor[_, _]]]
 
-    def list: ZStream[Any, Nothing, Experiment[_]]
+    def list: ZStream[Any, Nothing, FeatureDescriptor[_, _]]
 
-    def update(experiment: Experiment[_]): ZIO[Any, ExperimentNotFound, Unit]
+    def update(fd: FeatureDescriptor[_, _]): ZIO[Any, NotFound, Unit]
   }
-  object ExperimentRepo {
+  object FeatureDescriptorRepo {
     sealed trait Error
     object Error {
-      case class ExperimentAlreadyExists(experimentId: ExperimentId) extends Error
-      case class ExperimentNotFound(experimentId: ExperimentId)      extends Error
+      case class AlreadyExists(id: FeatureDescriptorId) extends Error
+      case class NotFound(id: FeatureDescriptorId)      extends Error
     }
   }
 
-  trait FeatureRepo {
-    import FeatureRepo.Error._
+  trait FeatureDecisionMatrixRepo {
+    import FeatureDecisionMatrixRepo.Error._
 
-    def create[In](fd: Feature[In]): ZIO[Any, FeatureAlreadyExists, Unit]
+    def create(fd: FeatureDecisionMatrix[_]): ZIO[Any, AlreadyExists, Unit]
 
-    def delete(id: FeatureId): ZIO[Any, FeatureNotFound, Unit]
+    def delete(id: FeatureDecisionMatrixId): ZIO[Any, NotFound, Unit]
 
-    def get(id: FeatureId): ZIO[Any, Throwable, Option[Feature[_]]]
+    def get(id: FeatureDecisionMatrixId): ZIO[Any, Throwable, Option[FeatureDecisionMatrix[_]]]
 
-    def list: ZStream[Any, Nothing, Feature[_]]
+    def list: ZStream[Any, Nothing, FeatureDecisionMatrix[_]]
 
-    def update[In, Out](fd: Feature[In]): ZIO[Any, FeatureNotFound, Unit]
+    def update(fd: FeatureDecisionMatrix[_]): ZIO[Any, NotFound, Unit]
   }
-  object FeatureRepo {
+  object FeatureDecisionMatrixRepo {
     sealed trait Error
     object Error {
-      case class FeatureAlreadyExists(featureId: FeatureId) extends Error
-      case class FeatureNotFound(featureId: FeatureId)      extends Error
+      case class AlreadyExists(id: FeatureDecisionMatrixId) extends Error
+      case class NotFound(id: FeatureDecisionMatrixId)      extends Error
     }
   }
 

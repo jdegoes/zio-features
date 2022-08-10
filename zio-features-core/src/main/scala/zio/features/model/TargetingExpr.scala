@@ -4,7 +4,7 @@ import scala.language.implicitConversions
 
 // Mental Model:
 //
-// type TargetingExpr[-Input, +A] == Data[Input] => A
+// type TargetingExpr[-Input, +A] == Params[Input] => A
 sealed trait TargetingExpr[-Input, +Out] { self =>
   final def &&[Input1 <: Input](that: TargetingExpr[Input1, Boolean])(implicit
     ev: Out <:< Boolean
@@ -38,7 +38,8 @@ sealed trait TargetingExpr[-Input, +Out] { self =>
     TargetingExpr.Negation(self.widen[Boolean])
 }
 object TargetingExpr {
-  private[features] case object Random extends TargetingExpr[Any, Double]
+  private[features] case object Random      extends TargetingExpr[Any, Double]
+  private[features] case object CurrentTime extends TargetingExpr[Any, java.time.Instant]
   private[features] final case class Equals[Input, Type](
     left: TargetingExpr[Input, Type],
     right: TargetingExpr[Input, Type]

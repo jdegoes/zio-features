@@ -4,8 +4,8 @@ package zio.features.model
 final case class FeatureDescriptor[Input, Output](
   id: FeatureDescriptorId,
   description: Vector[String],
-  inputDescriptor: DataDescriptor[Input],
-  outputDescriptor: DataDescriptor[Output]
+  inputDescriptor: ParamsDescriptor[Input],
+  outputDescriptor: ParamsDescriptor[Output]
 ) {
   self =>
   def ??(description2: String): FeatureDescriptor[Input, Output] =
@@ -20,6 +20,6 @@ final case class FeatureDescriptor[Input, Output](
 
 object FeatureDescriptor {
   def apply(name: String): FeatureDescriptor[Any, Any] =
-    FeatureDescriptor(FeatureDescriptorId(name), Vector.empty, DataDescriptor.empty, DataDescriptor.empty)
+    FeatureDescriptor(FeatureDescriptorId(name), Vector.empty, ParamsDescriptor.empty, ParamsDescriptor.empty)
 
 }
