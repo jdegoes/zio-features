@@ -5,6 +5,7 @@ import zio.stream._
 import zio.features.model._
 
 trait CommonApis {
+  trait MetricsCollector {}
 
   trait FeatureDescriptorRepo {
     import FeatureDescriptorRepo.Error._
