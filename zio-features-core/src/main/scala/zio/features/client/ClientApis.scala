@@ -1,7 +1,7 @@
-package zio.features.api.client
+package zio.features.client
 
 import zio._
-import zio.features.model._
+import zio.features.common.model._
 
 trait ClientApis {
   trait FeatureCatalog[Input] {
@@ -22,10 +22,9 @@ trait ClientApis {
       if (isDisabled(fd)) body.map(Some(_)) else ZIO.none
   }
 
-  trait Features extends FeatureCatalog[Any] {
+  trait Features {
     def catalog[Input](input: Params[Input]): FeatureCatalog[Input]
-  }
-  object Features {
-    lazy val live: ZLayer[Any, Nothing, Features] = ???
+
+    val basic: FeatureCatalog[Any] = catalog(Params.empty)
   }
 }

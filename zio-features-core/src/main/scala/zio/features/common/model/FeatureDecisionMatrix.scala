@@ -1,4 +1,4 @@
-package zio.features.model
+package zio.features.common.model
 
 import java.time.Instant
 

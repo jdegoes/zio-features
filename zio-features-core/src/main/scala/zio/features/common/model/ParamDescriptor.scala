@@ -1,4 +1,4 @@
-package zio.features.model
+package zio.features.common.model
 
 sealed trait ParamDescriptor[KeyValue] { self =>
   type Key <: Singleton with String

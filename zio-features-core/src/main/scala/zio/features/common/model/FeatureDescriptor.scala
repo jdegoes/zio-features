@@ -1,4 +1,4 @@
-package zio.features.model
+package zio.features.common.model
 
 // FeatureTemplate, FeatureDescriptor
 final case class FeatureDescriptor[Input, Output](

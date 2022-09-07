@@ -1,7 +1,7 @@
 package zio.features.examples
 
 import zio._
-import zio.features.client._
+import zio.features.client.api._
 
 object EcommerceExample {
   val lifetime_spend = ParamDescriptor.double("lifetime_spend")
@@ -53,7 +53,7 @@ object EcommerceExample {
 
   class PurchaseService(database: Database, features: Features) {
     def completePurchase(purchase: Purchase): Task[Unit] =
-      features.ifEnabled(smsNotifyPurchase)(_ => sendSmsNotification(purchase)) *> ZIO.unit
+      features.basic.ifEnabled(smsNotifyPurchase)(_ => sendSmsNotification(purchase)) *> ZIO.unit
 
     def sendSmsNotification(purchase: Purchase): Task[Unit] =
       ???
