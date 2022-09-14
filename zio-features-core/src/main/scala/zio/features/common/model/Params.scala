@@ -19,6 +19,10 @@ sealed abstract case class Params[Types] private (private val data: Map[ParamDes
     value: Value
   ): Params[Types & (Key, Value)] =
     new Params[Types & (Key, Value)](data + (ParamDescriptor[Key, Value](name) -> value)) {}
+
+  object unsafe {
+    def get(pd: ParamDescriptor[_])(implicit unsafe: Unsafe): Option[Any] = data.get(pd)
+  }
 }
 object Params {
   val empty: Params[Any] = new Params[Any](Map.empty) {}
